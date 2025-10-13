@@ -1,12 +1,14 @@
 from datetime import datetime,date, time
+from tabulate import tabulate
 import csv
 import os
 
-def pengeluaran(now_formatted, path):
+def pengeluaran(path):
     while True:
         # out = ()
         while True:
             try: 
+                now_formatted= datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 kategori = input("Kategori : ")
                 uang = int(input("Jumlah : "))
                 deskripsi = input("Deskrpsi : ")
@@ -38,16 +40,18 @@ def pengeluaran(now_formatted, path):
                 print(f"An error occurred: {e}")        
         
 def daftar_pengeluaran(file_path):
+    data = []
     print(20*"-", "List Pengeluaranmu hari ini", 20*"-")
     try:
         with open(file_path, mode='r', newline='', encoding='utf-8') as file:
             csv_reader = csv.reader(file)
-            for i in csv_reader:
-                print(i)
+            for row in csv_reader:
+                data.append(row)
     except FileNotFoundError:
         print("The file 'example.csv' was not found.")
     except Exception as e:
         print(f"An error occurred: {e}") 
+    print(tabulate(data, headers="firstrow", tablefmt = "pipe"))
     
 def total_pengeluaran(file_path):
     jumlah = 0 
@@ -71,7 +75,7 @@ def filter(file_path, kategori):
                     print(row)
     except Exception as e:
         print(f"Required error : {e}")
-now_formatted= datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
 transaksi = []
 total = 0
 path= "C:/Users/DANY/Pemrograman/python/Project_beginner/expanse_tracker"
@@ -96,7 +100,7 @@ while True:
             print("Pilihanmu tidak valid, masukkan angka")
     print(70*"=")
     if opt == 1:
-        pengeluaran(now_formatted, path)
+        pengeluaran(path)
     elif opt == 2:
         daftar_pengeluaran(file_path)
     elif opt == 3:
